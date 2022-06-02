@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import AcceptTermsAndConditions from '../../components/AcceptTermsAndConditions';
 
-function SummaryForm() {
+const SummaryForm: React.FC = () => {
   const [termsAndConditionsChecked, setTermsAndConditionsChecked] =
     useState(false);
 
@@ -31,6 +31,6 @@ function SummaryForm() {
       </Button>
     </Form>
   );
-}
+};
 
 export default SummaryForm;

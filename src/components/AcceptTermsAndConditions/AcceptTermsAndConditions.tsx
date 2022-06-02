@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function AcceptTermsAndConditions(): JSX.Element {
+export default function AcceptTermsAndConditions(): React.ReactElement {
   return (
     <React.Fragment>
       <span>
