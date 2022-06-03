@@ -1,12 +1,5 @@
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Options } from '@testing-library/user-event/dist/types/options';
 import React from 'react';
 import SummaryForm from '../SummaryForm';
 
