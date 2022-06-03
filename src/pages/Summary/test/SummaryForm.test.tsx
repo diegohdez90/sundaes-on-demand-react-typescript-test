@@ -1,14 +1,19 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import SummaryForm from '../SummaryForm';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Options } from '@testing-library/user-event/dist/types/options';
 import React from 'react';
+import SummaryForm from '../SummaryForm';
 
-const setup = (component: React.ReactElement) => {
-  return {
-    user: userEvent.setup(),
-    ...render(component),
-  };
-};
+const setup = (component: React.ReactElement) => ({
+  user: userEvent.setup(),
+  ...render(component),
+});
 
 describe('Summary page', () => {
   test('should render page', async () => {
@@ -53,5 +58,26 @@ describe('Summary page', () => {
     expect(button).toBeDisabled();
   });
 
-  test('should popover responds to hover', () => {});
+  test('should popover responds to hover', async () => {
+    const { user } = setup(<SummaryForm />);
+
+    const nullPopover = screen.queryByText(
+      /No ice cream will actually be delivered/i
+    );
+    expect(nullPopover).not.toBeInTheDocument();
+
+    const termsAndConditions = screen.getByText(/terms and conditions/i);
+    await user.hover(termsAndConditions);
+
+    const popover = screen.getByText(
+      /No ice cream will actually be delivered/i
+    );
+    expect(popover).toBeInTheDocument();
+
+    await user.unhover(termsAndConditions);
+    const content = screen.queryByText(
+      /No ice cream will actually be delivered/i
+    );
+    expect(content).not.toBeInTheDocument();
+  });
 });

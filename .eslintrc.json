@@ -5,13 +5,13 @@
   },
   "extends": [
     "plugin:react/recommended",
-    "airbnb",
     "react-app",
     "react-app/jest",
-    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:testing-library/react",
-    "plugin:jest-dom/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "prettier",
+    "plugin:jest-dom/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -21,12 +21,6 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "testing-library",
-    "jsdom",
-    "jest-dom"
-  ],
+  "plugins": ["react", "@typescript-eslint", "react-hooks", "testing-library"],
   "rules": {}
 }
