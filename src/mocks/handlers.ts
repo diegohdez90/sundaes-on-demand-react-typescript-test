@@ -1,7 +1,8 @@
-import { rest, setupWorker } from 'msw';
+import { rest } from 'msw';
+import { ScoopsResponse } from '../utils/ScoopsResponse';
 
 export const handlers = [
-  rest.get('http://localhost:3030/scoops', (req, res, ctx) => {
+  rest.get<ScoopsResponse>('http://localhost:3030/scoops', (req, res, ctx) => {
     return res(
       ctx.json([
         {
