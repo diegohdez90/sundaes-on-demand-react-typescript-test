@@ -6,9 +6,10 @@ import { Row } from 'react-bootstrap';
 
 interface Props {
   optionType: string;
+  singular: string;
 }
 
-const Options = ({ optionType }: Props) => {
+const Options = ({ optionType, singular }: Props) => {
   const [items, setItems] = useState<ScoopsResponse[]>([]);
   useEffect(() => {
     axios
@@ -28,6 +29,7 @@ const Options = ({ optionType }: Props) => {
           key={item.name}
           name={item.name}
           imagePath={item.imagePath}
+          optionType={singular}
         />
       ))}
     </Row>
