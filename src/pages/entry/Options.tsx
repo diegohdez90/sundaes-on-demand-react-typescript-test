@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../config/AxiosConfig';
 import { ScoopsResponse } from '../../utils/ScoopsResponse';
-import ScoopOption from './ScoopOption';
+import Option from './Option';
 import { Row } from 'react-bootstrap';
+import AlertBanner from '../../components/AlertBanner';
 
 interface Props {
   optionType: string;
@@ -11,6 +12,7 @@ interface Props {
 
 const Options = ({ optionType, singular }: Props) => {
   const [items, setItems] = useState<ScoopsResponse[]>([]);
+  const [error, setError] = useState(false);
   useEffect(() => {
     axios
       .get(`http://localhost:3030/${optionType}`)
@@ -18,20 +20,22 @@ const Options = ({ optionType, singular }: Props) => {
         setItems(res.data);
       })
       .catch((err) => {
-        console.error(err);
+        setError(true);
       });
   }, [optionType]);
 
   return (
     <Row>
-      {items.map((item) => (
-        <ScoopOption
-          key={item.name}
-          name={item.name}
-          imagePath={item.imagePath}
-          optionType={singular}
-        />
-      ))}
+      {error && <AlertBanner />}
+      {!error &&
+        items.map((item) => (
+          <Option
+            key={item.name}
+            name={item.name}
+            imagePath={item.imagePath}
+            optionType={singular}
+          />
+        ))}
     </Row>
   );
 };

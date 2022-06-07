@@ -6,7 +6,7 @@ interface Props extends ScoopsResponse {
   optionType: string;
 }
 
-const ScoopOption = ({
+const Option = ({
   name,
   imagePath,
   optionType,
@@ -22,4 +22,4 @@ const ScoopOption = ({
   );
 };
 
-export default ScoopOption;
+export default Option;
