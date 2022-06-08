@@ -4,7 +4,7 @@ import Options from '../Options';
 
 describe('Options', () => {
   test('should display image for each scoop option from server', async () => {
-    render(<Options optionType="scoops" singular="scoop" />);
+    render(<Options optionType="scoops" singular="scoop" inputType="number" />);
 
     const scoopImages: Array<HTMLImageElement> = await screen.findAllByRole(
       'img',

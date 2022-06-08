@@ -4,7 +4,9 @@ import Options from '../Options';
 
 describe('Toppings', () => {
   test('should display image for each topping option from server', async () => {
-    render(<Options optionType="toppings" singular="topping" />);
+    render(
+      <Options optionType="toppings" singular="topping" inputType="number" />
+    );
 
     const toppingImages: Array<HTMLImageElement> = await screen.findAllByRole(
       'img',

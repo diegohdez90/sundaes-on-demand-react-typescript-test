@@ -5,16 +5,22 @@ import { ScoopsResponse } from '../../utils/ScoopsResponse';
 interface Props extends ScoopsResponse {
   optionType: string;
   updateItemCount: (itemName: string, newItemCount: string) => void;
+  inputType: string;
 }
 
 const Option = ({
   name,
   imagePath,
   optionType,
+  inputType,
   updateItemCount,
 }: Props): React.ReactElement<Props> => {
   const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateItemCount(name, e.target.value);
+    if (inputType === 'checkbox') {
+      updateItemCount(name, e.target.checked ? '1' : '0');
+    } else {
+      updateItemCount(name, e.target.value);
+    }
   };
   return (
     <Col xs={12} sm={6} md={4} className="text-center">
@@ -28,11 +34,20 @@ const Option = ({
           {name}
         </Form.Label>
         <Col xs="5">
-          <Form.Control
-            type="number"
-            defaultValue={0}
-            onChange={onChangeValue}
-          />
+          {' '}
+          {inputType === 'checkbox' ? (
+            <Form.Check
+              type="checkbox"
+              defaultValue={0}
+              onChange={onChangeValue}
+            />
+          ) : (
+            <Form.Control
+              type="number"
+              defaultValue={0}
+              onChange={onChangeValue}
+            />
+          )}
         </Col>
       </Form.Group>
     </Col>

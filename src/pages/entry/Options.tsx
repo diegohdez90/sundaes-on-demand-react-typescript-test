@@ -14,21 +14,18 @@ import { useOrderDetails } from '../../context/OrderDetails';
 interface Props {
   optionType: string;
   singular: string;
+  inputType: string;
 }
 
-const Options = ({ optionType, singular }: Props) => {
+const Options = ({ optionType, singular, inputType }: Props) => {
   const [items, setItems] = useState<ScoopsResponse[]>([]);
   const [error, setError] = useState(false);
   const [orderDetails, updateItemCount] = useOrderDetails();
   useEffect(() => {
     axios
       .get(`http://localhost:3030/${optionType}`)
-      .then((res) => {
-        setItems(res.data);
-      })
-      .catch((err) => {
-        setError(true);
-      });
+      .then((res) => setItems(res.data))
+      .catch((err) => setError(true));
   }, [optionType]);
 
   const title = `${optionType[0].toUpperCase()}${optionType
@@ -47,6 +44,7 @@ const Options = ({ optionType, singular }: Props) => {
             name={item.name}
             imagePath={item.imagePath}
             optionType={singular}
+            inputType={inputType}
             updateItemCount={(itemName: string, newItemCount: string) => {
               updateItemCount(itemName, newItemCount, optionType);
             }}
