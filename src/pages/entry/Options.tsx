@@ -4,6 +4,7 @@ import { ScoopsResponse } from '../../utils/ScoopsResponse';
 import Option from './Option';
 import { Row } from 'react-bootstrap';
 import AlertBanner from '../../components/AlertBanner';
+import { prices, STORE_PRICES } from '../../utils/constants';
 
 interface Props {
   optionType: string;
@@ -26,7 +27,9 @@ const Options = ({ optionType, singular }: Props) => {
 
   return (
     <Row>
+      <h3>{`${singular[0].toUpperCase}${singular.slice(1).toLowerCase()}`}</h3>
       {error && <AlertBanner />}
+      <p>{prices[optionType as keyof STORE_PRICES]}</p>
       {!error &&
         items.map((item) => (
           <Option
