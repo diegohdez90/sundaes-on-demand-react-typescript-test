@@ -6,9 +6,9 @@ import SummaryForm from './pages/Summary/SummaryForm';
 function App() {
   return (
     <>
-      <OrderDetailsProvider></OrderDetailsProvider>
-      <OrderEntry />
-      <SummaryForm />
+      <OrderDetailsProvider>
+        <OrderEntry />
+      </OrderDetailsProvider>
     </>
   );
 }

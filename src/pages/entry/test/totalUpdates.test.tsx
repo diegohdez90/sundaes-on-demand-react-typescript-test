@@ -2,24 +2,27 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Options from '../Options';
 import userEvent from '@testing-library/user-event';
+import { OrderDetailsProvider } from '../../../context/OrderDetails';
 
 const setup = (component: React.ReactElement) => ({
   user: userEvent.setup(),
-  ...render(component),
+  ...render(component, {
+    wrapper: OrderDetailsProvider,
+  }),
 });
 
 describe('total Updates', () => {
   test('should update scoop subtotal when scoops changes', async () => {
     const { user } = setup(<Options optionType="scoops" singular="scoop" />);
 
-    const scoopsSubTotal = screen.getByText('Scoops total: $', {
+    const scoopsSubTotal = screen.getByText('Total: $', {
       exact: false,
     });
 
     expect(scoopsSubTotal).toHaveTextContent('0.00');
 
     const vanillaInput = await screen.findByRole('spinbutton', {
-      name: 'vanilla',
+      name: 'Vanilla',
     });
     user.type(vanillaInput, '1');
 

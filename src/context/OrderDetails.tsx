@@ -5,9 +5,22 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { MapOrderDetails, prices, STORE_PRICES } from '../utils/constants';
+import {
+  MapOrderDetails,
+  OrderDetailsContext,
+  prices,
+  STORE_PRICES,
+} from '../utils/constants';
 
-const OrderDetails = createContext();
+const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  }).format(amount);
+};
+
+const OrderDetails = createContext<OrderDetailsContext | null>(null);
 
 export const useOrderDetails = () => {
   const context = useContext(OrderDetails);
@@ -21,30 +34,31 @@ export const useOrderDetails = () => {
 
 const calculateSubTotal = (
   optionItemType: string,
-  optionCounts: MapOrderDetails
+  optionCounts: MapOrderDetails<Map<string, number>>
 ): number => {
   let optionCount = 0;
-  for (const count of optionCounts[
-    optionItemType as keyof MapOrderDetails
-  ].values()) {
+  for (const count of optionCounts[optionItemType].values()) {
     optionCount += count;
   }
-  return optionCount * prices[optionItemType as keyof STORE_PRICES];
+  return optionCount * prices[optionItemType];
 };
 export const OrderDetailsProvider = (props: any) => {
-  const [optionCounts, setOptionCounts] = useState<MapOrderDetails>({
+  const [optionCounts, setOptionCounts] = useState<
+    MapOrderDetails<Map<string, number>>
+  >({
     scoops: new Map<string, number>(),
     toppings: new Map<string, number>(),
   });
 
+  const zeroCurrency = formatCurrency(0);
   const [totals, setTotals] = useState<{
-    scoops: number;
-    toppings: number;
-    total: number;
+    scoops: string;
+    toppings: string;
+    total: string;
   }>({
-    scoops: 0,
-    toppings: 0,
-    total: 0,
+    scoops: zeroCurrency,
+    toppings: zeroCurrency,
+    total: zeroCurrency,
   });
 
   useEffect(() => {
@@ -52,9 +66,9 @@ export const OrderDetailsProvider = (props: any) => {
     const toppingsSubtotal = calculateSubTotal('toppings', optionCounts);
     const total = scoopsSubtotal + toppingsSubtotal;
     setTotals({
-      scoops: scoopsSubtotal,
-      toppings: toppingsSubtotal,
-      total: total,
+      scoops: formatCurrency(scoopsSubtotal),
+      toppings: formatCurrency(toppingsSubtotal),
+      total: formatCurrency(total),
     });
   }, [optionCounts]);
 
@@ -67,8 +81,8 @@ export const OrderDetailsProvider = (props: any) => {
       const newOptionCounts = {
         ...optionCounts,
       };
-      const optionCountMap = optionCounts[optionType as keyof MapOrderDetails];
-      optionCountMap.set(itemName, Number(newItemCount));
+      const optionCountMap = optionCounts[optionType];
+      optionCountMap.set(itemName, parseInt(newItemCount));
       setOptionCounts(newOptionCounts);
     };
     return [{ ...optionCounts, totals }, updateItemCount];
