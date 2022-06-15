@@ -1,26 +1,16 @@
 import React, {
   createContext,
+  PropsWithChildren,
   useContext,
   useEffect,
   useMemo,
   useState,
+  ProviderProps,
 } from 'react';
-import {
-  MapOrderDetails,
-  OrderDetailsContext,
-  prices,
-  STORE_PRICES,
-} from '../utils/constants';
+import { OrderDetailsInterface, prices } from '../utils/constants';
+import { formatCurrency } from '../utilities/formatCurrency';
 
-const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-  }).format(amount);
-};
-
-const OrderDetails = createContext<OrderDetailsContext | null>(null);
+const OrderDetails = createContext<OrderDetailsInterface | null>(null);
 
 export const useOrderDetails = () => {
   const context = useContext(OrderDetails);
@@ -34,7 +24,7 @@ export const useOrderDetails = () => {
 
 const calculateSubTotal = (
   optionItemType: string,
-  optionCounts: MapOrderDetails<Map<string, number>>
+  optionCounts: {}
 ): number => {
   let optionCount = 0;
   for (const count of optionCounts[optionItemType].values()) {
@@ -42,50 +32,67 @@ const calculateSubTotal = (
   }
   return optionCount * prices[optionItemType];
 };
-export const OrderDetailsProvider = (props: any) => {
-  const [optionCounts, setOptionCounts] = useState<
-    MapOrderDetails<Map<string, number>>
-  >({
-    scoops: new Map<string, number>(),
-    toppings: new Map<string, number>(),
+
+export const OrderDetailsProvider = (
+  props: PropsWithChildren<{
+    children: React.ReactNode;
+  }>
+): JSX.Element => {
+  const [optionCounts, setOptionCounts] = useState({
+    scoops: new Map<string, number>([
+      ['Mint chip', 0],
+      ['Vanilla', 0],
+      ['Chocolate', 0],
+      ['Salted caramel', 0],
+    ]),
+    toppings: new Map<string, number>([
+      ['M&Ms', 0],
+      ['Hot fudge', 0],
+      ['Peanut butter cups', 0],
+      ['Gummi bears', 0],
+      ['Mochi', 0],
+      ['Cherries', 0],
+    ]),
   });
 
   const zeroCurrency = formatCurrency(0);
-  const [totals, setTotals] = useState<{
-    scoops: string;
-    toppings: string;
-    total: string;
-  }>({
-    scoops: zeroCurrency,
-    toppings: zeroCurrency,
-    total: zeroCurrency,
-  });
+  const [totals, setTotals] = useState<Map<string, string>>(
+    new Map<string, string>([
+      ['scoops', zeroCurrency],
+      ['toppings', zeroCurrency],
+      ['total', zeroCurrency],
+    ])
+  );
 
   useEffect(() => {
     const scoopsSubtotal = calculateSubTotal('scoops', optionCounts);
     const toppingsSubtotal = calculateSubTotal('toppings', optionCounts);
     const total = scoopsSubtotal + toppingsSubtotal;
-    setTotals({
-      scoops: formatCurrency(scoopsSubtotal),
-      toppings: formatCurrency(toppingsSubtotal),
-      total: formatCurrency(total),
-    });
+    const innerTotal = new Map<string, string>();
+    innerTotal.set('scoops', formatCurrency(scoopsSubtotal));
+    innerTotal.set('toppings', formatCurrency(toppingsSubtotal));
+    innerTotal.set('total', formatCurrency(total));
+
+    setTotals(innerTotal);
   }, [optionCounts]);
 
   const value = useMemo(() => {
-    const updateItemCount = (
+    function updateItemCount(
       itemName: string,
       newItemCount: string,
       optionType: string
-    ) => {
-      const newOptionCounts = {
-        ...optionCounts,
-      };
+    ) {
+      const newOptionCounts = { ...optionCounts };
       const optionCountMap = optionCounts[optionType];
-      optionCountMap.set(itemName, parseInt(newItemCount));
+      optionCountMap?.set(itemName, parseInt(newItemCount));
       setOptionCounts(newOptionCounts);
-    };
+    }
+
     return [{ ...optionCounts, totals }, updateItemCount];
   }, [optionCounts, totals]);
-  return <OrderDetails.Provider value={value} {...props} />;
+  return (
+    <OrderDetails.Provider value={value} {...props}>
+      {props.children}
+    </OrderDetails.Provider>
+  );
 };

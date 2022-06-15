@@ -1,7 +1,19 @@
-export interface OrderDetailsContext {
-  orderDetails: string;
-  updateItemCount?: () => void;
-}
+import React, { ProviderProps } from 'react';
+
+export type OrderDetailsInterface = {
+  orderDetails: {
+    totals: Map<string, string>;
+  };
+  optionCounts: Map<string, Map<string, number>>;
+  updateItemCount: (
+    itemName: string,
+    newItemCount: string,
+    optionType: string
+  ) => void;
+  children: React.ReactNode;
+  value: ProviderProps<OrderDetailsInterface | null>;
+  [Symbol.toStringTag]: string;
+};
 
 export type STORE_PRICES = {
   scoops: number;
@@ -10,8 +22,6 @@ export type STORE_PRICES = {
 };
 
 export type MapOrderDetails<T> = {
-  scoops: T;
-  toppings: T;
   [key: string]: T;
 };
 

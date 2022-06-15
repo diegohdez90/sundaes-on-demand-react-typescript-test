@@ -2,13 +2,11 @@ import React from 'react';
 import { render, screen } from './../../../test-utils/testing-library-utils';
 import Options from '../Options';
 import userEvent from '@testing-library/user-event';
-import { OrderDetailsProvider } from '../../../context/OrderDetails';
+import OrderEntry from '../OrderEntry';
 
 const setup = (component: React.ReactElement) => ({
   user: userEvent.setup(),
-  ...render(component, {
-    wrapper: OrderDetailsProvider,
-  }),
+  ...render(component),
 });
 
 describe('total Updates', () => {
@@ -63,5 +61,79 @@ describe('total Updates', () => {
 
     user.click(hotFudgeCheckbox);
     expect(totalToppings).toHaveTextContent('1.50');
+  });
+});
+
+describe('Grand total', () => {
+  test('should render total if scoop is added first', async () => {
+    const { user } = setup(<OrderEntry />);
+    const total = screen.getByRole('heading', {
+      name: /Total: \$/,
+    });
+
+    expect(total).toHaveTextContent('0.00');
+
+    const vanillaInput = await screen.findByRole('spinbutton', {
+      name: 'Vanilla',
+    });
+    user.clear(vanillaInput);
+    user.type(vanillaInput, '2');
+
+    expect(total).toHaveTextContent('4.00');
+
+    const cherriesCheckbox = await screen.findByRole('checkbox', {
+      name: 'Cherries',
+    });
+
+    user.click(cherriesCheckbox);
+    expect(total).toHaveTextContent('5.50');
+  });
+
+  test('should render total if topping is added first', async () => {
+    const { user } = setup(<OrderEntry />);
+    const total = screen.getByRole('heading', {
+      name: /Total: \$/,
+    });
+
+    const cherriesCheckbox = await screen.findByRole('checkbox', {
+      name: 'Cherries',
+    });
+
+    user.click(cherriesCheckbox);
+    expect(total).toHaveTextContent('1.50');
+
+    const vanillaInput = await screen.findByRole('spinbutton', {
+      name: 'Vanilla',
+    });
+    user.clear(vanillaInput);
+    user.type(vanillaInput, '2');
+
+    expect(total).toHaveTextContent('4.00');
+  });
+
+  test('should render total if item is removed', async () => {
+    const { user } = setup(<OrderEntry />);
+    const total = screen.getByRole('heading', {
+      name: /Total: \$/,
+    });
+
+    const cherriesCheckbox = await screen.findByRole('checkbox', {
+      name: 'Cherries',
+    });
+    user.click(cherriesCheckbox);
+
+    const vanillaInput = await screen.findByRole('spinbutton', {
+      name: 'Vanilla',
+    });
+    user.clear(vanillaInput);
+    user.type(vanillaInput, '2');
+
+    user.clear(vanillaInput);
+    user.type(vanillaInput, '1');
+
+    expect(total).toHaveTextContent('3.50');
+
+    user.click(cherriesCheckbox);
+    expect(total).toHaveTextContent('2.00');
   });
 });

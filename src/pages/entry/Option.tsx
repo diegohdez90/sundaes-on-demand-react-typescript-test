@@ -19,7 +19,7 @@ const Option = ({
     if (inputType === 'checkbox') {
       updateItemCount(name, e.target.checked ? '1' : '0');
     } else {
-      updateItemCount(name, e.target.value);
+      updateItemCount(name, String(e.target.value));
     }
   };
   return (

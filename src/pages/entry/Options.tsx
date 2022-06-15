@@ -4,11 +4,7 @@ import { ScoopsResponse } from '../../utils/ScoopsResponse';
 import Option from './Option';
 import { Row } from 'react-bootstrap';
 import AlertBanner from '../../components/AlertBanner';
-import {
-  OrderDetailsContext,
-  prices,
-  STORE_PRICES,
-} from '../../utils/constants';
+import { prices } from '../../utils/constants';
 import { useOrderDetails } from '../../context/OrderDetails';
 
 interface Props {
@@ -20,7 +16,7 @@ interface Props {
 const Options = ({ optionType, singular, inputType }: Props) => {
   const [items, setItems] = useState<ScoopsResponse[]>([]);
   const [error, setError] = useState(false);
-  const [orderDetails, updateItemCount] = useOrderDetails();
+  const [{ totals }, updateItemCount] = useOrderDetails();
   useEffect(() => {
     axios
       .get(`http://localhost:3030/${optionType}`)
@@ -36,7 +32,7 @@ const Options = ({ optionType, singular, inputType }: Props) => {
       <h3>{title}</h3>
       {error && <AlertBanner />}
       <p>{prices[optionType]} each</p>
-      <p>{`${title} Total: ${orderDetails.totals[optionType]}`}</p>
+      <p>{`${title} total: ${totals.get(optionType)}`}</p>
       {!error &&
         items.map((item) => (
           <Option
