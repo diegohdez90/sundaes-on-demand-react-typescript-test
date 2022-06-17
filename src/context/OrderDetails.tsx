@@ -24,7 +24,7 @@ export const useOrderDetails = () => {
 
 const calculateSubTotal = (
   optionItemType: string,
-  optionCounts: {}
+  optionCounts: Map<string, number>
 ): number => {
   let optionCount = 0;
   for (const count of optionCounts[optionItemType].values()) {
@@ -88,7 +88,14 @@ export const OrderDetailsProvider = (
       setOptionCounts(newOptionCounts);
     }
 
-    return [{ ...optionCounts, totals }, updateItemCount];
+    function resetOrder() {
+      setOptionCounts({
+        scoops: new Map<string, number>(),
+        toppings: new Map<string, number>(),
+      });
+    }
+
+    return [{ ...optionCounts, totals }, updateItemCount, resetOrder];
   }, [optionCounts, totals]);
   return (
     <OrderDetails.Provider value={value} {...props}>

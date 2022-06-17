@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Button, Form, FormLabelProps } from 'react-bootstrap';
 import AcceptTermsAndConditions from '../../components/AcceptTermsAndConditions';
 
-const SummaryForm: React.FC = () => {
+const SummaryForm: React.FC<{
+  setOrderPhase: (stage: string) => void;
+}> = ({ setOrderPhase }: { setOrderPhase: (stage: string) => void }) => {
   const [termsAndConditionsChecked, setTermsAndConditionsChecked] =
     useState(false);
 
@@ -14,8 +16,13 @@ const SummaryForm: React.FC = () => {
     setTermsAndConditionsChecked(e.target.checked);
   };
 
+  const onHandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setOrderPhase?.('completed');
+  };
+
   return (
-    <Form>
+    <Form onSubmit={onHandleSubmit}>
       <Form.Group controlId="terms-and-conditions">
         <Form.Check
           id="terms-and-conditions"

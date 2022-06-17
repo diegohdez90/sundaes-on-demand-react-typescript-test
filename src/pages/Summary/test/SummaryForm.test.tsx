@@ -10,7 +10,7 @@ const setup = (component: React.ReactElement) => ({
 
 describe('Summary page', () => {
   test('should render page', async () => {
-    await setup(<SummaryForm />);
+    await setup(<SummaryForm setOrderPhase={jest.fn()} />);
     const checkbox = screen.getByRole('checkbox', {
       name: /terms and conditions/i,
     });
@@ -22,7 +22,7 @@ describe('Summary page', () => {
   });
 
   test('should enable button after checked terms and conditions', async () => {
-    const { user } = setup(<SummaryForm />);
+    const { user } = setup(<SummaryForm setOrderPhase={jest.fn()} />);
     const checkbox = screen.getByRole('checkbox', {
       name: /terms and conditions/i,
     });
@@ -35,7 +35,7 @@ describe('Summary page', () => {
   });
 
   test('should disabled button after unselect terms and conditions checkbox', async () => {
-    const { user } = setup(<SummaryForm />);
+    const { user } = setup(<SummaryForm setOrderPhase={jest.fn()} />);
     const checkbox = screen.getByRole('checkbox', {
       name: /terms and conditions/i,
     });
@@ -52,7 +52,7 @@ describe('Summary page', () => {
   });
 
   test('should popover responds to hover', async () => {
-    const { user } = setup(<SummaryForm />);
+    const { user } = setup(<SummaryForm setOrderPhase={jest.fn()} />);
 
     const nullPopover = screen.queryByText(
       /No ice cream will actually be delivered/i
