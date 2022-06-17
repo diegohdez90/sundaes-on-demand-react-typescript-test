@@ -10,7 +10,7 @@ const setup = (component: React.ReactElement) => ({
 
 describe('Summary page', () => {
   test('should render page', async () => {
-    await setup(<SummaryForm setOrderPhase={jest.fn()} />);
+    await setup(<SummaryForm />);
     const checkbox = screen.getByRole('checkbox', {
       name: /terms and conditions/i,
     });

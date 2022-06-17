@@ -8,7 +8,7 @@ interface Props {
 
 export default function AlertBanner({ message, variant }: Props) {
   const alertMessage =
-    message || 'An unexpected error occurred. Please, try again later';
+    message || 'An unexpected error occurred. Please, try again later.';
   const alertVariant = variant || 'danger';
   return (
     <>

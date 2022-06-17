@@ -3,8 +3,8 @@ import { Button, Form, FormLabelProps } from 'react-bootstrap';
 import AcceptTermsAndConditions from '../../components/AcceptTermsAndConditions';
 
 const SummaryForm: React.FC<{
-  setOrderPhase: (stage: string) => void;
-}> = ({ setOrderPhase }: { setOrderPhase: (stage: string) => void }) => {
+  setOrderPhase?: (stage: string) => void;
+}> = ({ setOrderPhase }: { setOrderPhase?: (stage: string) => void }) => {
   const [termsAndConditionsChecked, setTermsAndConditionsChecked] =
     useState(false);
 
