@@ -24,7 +24,7 @@ export default function OrderSummary({
     const toppingList = toppingsArray.map((key) => <li key={key}>{key}</li>);
     toppingsDisplay = (
       <>
-        <h2>Toppings: {totals.toppings}</h2>
+        <h2>Toppings: {totals.get('toppings')}</h2>
         <ul>{toppingList}</ul>
       </>
     );
@@ -33,7 +33,7 @@ export default function OrderSummary({
   return (
     <div>
       <h1>Order Summary</h1>
-      <h2>Scoops: {totals.scoops}</h2>
+      <h2>Scoops: {totals.get('scoops')}</h2>
       <ul>{scoopList}</ul>
       {toppingsDisplay}
       <SummaryForm setOrderPhase={setOrderPhase} />

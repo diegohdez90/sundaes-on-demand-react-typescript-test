@@ -17,7 +17,7 @@ describe('confirmation', () => {
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(
-      'An unexpected error occurred. Please, try again later.'
+      'An unexpected error occurred. Please, try again later'
     );
   });
 });

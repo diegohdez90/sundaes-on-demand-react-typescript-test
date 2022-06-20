@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  act,
-  render,
-  screen,
-} from './../../../test-utils/testing-library-utils';
+import { render, screen } from './../../../test-utils/testing-library-utils';
 import Options from '../Options';
 import userEvent from '@testing-library/user-event';
 import OrderEntry from '../OrderEntry';
@@ -19,8 +15,6 @@ describe('total Updates', () => {
     const { user } = setup(
       <Options optionType="scoops" singular="scoop" inputType="number" />
     );
-    const userEvent = user;
-
     const scoopsSubTotal = screen.getByText('Scoops total: $', {
       exact: false,
     });
@@ -30,31 +24,23 @@ describe('total Updates', () => {
     const vanillaInput = await screen.findByRole('spinbutton', {
       name: 'Vanilla',
     });
-    userEvent?.clear(vanillaInput);
-    userEvent?.type(vanillaInput, '1');
+    user?.clear(vanillaInput);
+    await user?.type(vanillaInput, '1');
 
     expect(scoopsSubTotal).toHaveTextContent('2.00');
 
     const chocolateInput = await screen.findByRole('spinbutton', {
       name: 'Chocolate',
     });
-    userEvent?.clear(chocolateInput);
-    userEvent?.type(chocolateInput, '2');
+    user?.clear(chocolateInput);
+    await user?.type(chocolateInput, '2');
     expect(scoopsSubTotal).toHaveTextContent('6.00');
   });
 
   test('should update toppings when toppings update', async () => {
-    let userEvent: UserEvent | undefined;
-    await act(() => {
-      const { user } = setup(
-        <Options
-          optionType="toppings"
-          singular="topping"
-          inputType="checkbox"
-        />
-      );
-      userEvent = user;
-    });
+    const { user } = setup(
+      <Options optionType="toppings" singular="topping" inputType="checkbox" />
+    );
 
     const totalToppings = screen.getByText('Toppings total: $', {
       exact: false,
@@ -64,27 +50,24 @@ describe('total Updates', () => {
     const cherriesCheckbox = await screen.findByRole('checkbox', {
       name: 'Cherries',
     });
-    userEvent?.click(cherriesCheckbox);
+    await user?.click(cherriesCheckbox);
     expect(totalToppings).toHaveTextContent('1.50');
 
     const hotFudgeCheckbox = await screen.findByRole('checkbox', {
       name: 'Hot fudge',
     });
-    userEvent?.click(hotFudgeCheckbox);
+    await user?.click(hotFudgeCheckbox);
     expect(totalToppings).toHaveTextContent('3.00');
 
-    userEvent?.click(hotFudgeCheckbox);
+    await user?.click(hotFudgeCheckbox);
     expect(totalToppings).toHaveTextContent('1.50');
   });
 });
 
 describe('Grand total', () => {
   test('should render total if scoop is added first', async () => {
-    let userEvent: UserEvent | undefined;
-    await act(() => {
-      const { user } = setup(<OrderEntry setOrderPhase={jest.fn()} />);
-      userEvent = user;
-    });
+    const { user } = setup(<OrderEntry setOrderPhase={jest.fn()} />);
+
     const total = screen.getByRole('heading', {
       name: /Total: \$/,
     });
@@ -94,8 +77,8 @@ describe('Grand total', () => {
     const vanillaInput = await screen.findByRole('spinbutton', {
       name: 'Vanilla',
     });
-    userEvent?.clear(vanillaInput);
-    userEvent?.type(vanillaInput, '2');
+    user?.clear(vanillaInput);
+    await user?.type(vanillaInput, '2');
 
     expect(total).toHaveTextContent('4.00');
 
@@ -103,16 +86,12 @@ describe('Grand total', () => {
       name: 'Cherries',
     });
 
-    userEvent?.click(cherriesCheckbox);
+    await user?.click(cherriesCheckbox);
     expect(total).toHaveTextContent('5.50');
   });
 
   test('should render total if topping is added first', async () => {
-    let userEvent: UserEvent | undefined;
-    await act(() => {
-      const { user } = setup(<OrderEntry setOrderPhase={jest.fn()} />);
-      userEvent = user;
-    });
+    const { user } = setup(<OrderEntry setOrderPhase={jest.fn()} />);
     const total = screen.getByRole('heading', {
       name: /Total: \$/,
     });
@@ -121,24 +100,20 @@ describe('Grand total', () => {
       name: 'Cherries',
     });
 
-    userEvent?.click(cherriesCheckbox);
+    await user?.click(cherriesCheckbox);
     expect(total).toHaveTextContent('1.50');
 
     const vanillaInput = await screen.findByRole('spinbutton', {
       name: 'Vanilla',
     });
-    userEvent?.clear(vanillaInput);
-    userEvent?.type(vanillaInput, '2');
+    await user?.clear(vanillaInput);
+    await user?.type(vanillaInput, '2');
 
-    expect(total).toHaveTextContent('4.00');
+    expect(total).toHaveTextContent('5.50');
   });
 
   test('should render total if item is removed', async () => {
-    let userEvent: UserEvent | undefined;
-    await act(() => {
-      const { user } = setup(<OrderEntry setOrderPhase={jest.fn()} />);
-      userEvent = user;
-    });
+    const { user } = setup(<OrderEntry setOrderPhase={jest.fn()} />);
     const total = screen.getByRole('heading', {
       name: /Total: \$/,
     });
@@ -146,20 +121,20 @@ describe('Grand total', () => {
     const cherriesCheckbox = await screen.findByRole('checkbox', {
       name: 'Cherries',
     });
-    userEvent?.click(cherriesCheckbox);
+    await user?.click(cherriesCheckbox);
 
     const vanillaInput = await screen.findByRole('spinbutton', {
       name: 'Vanilla',
     });
-    userEvent?.clear(vanillaInput);
-    userEvent?.type(vanillaInput, '2');
+    user?.clear(vanillaInput);
+    await user?.type(vanillaInput, '2');
 
-    userEvent?.clear(vanillaInput);
-    userEvent?.type(vanillaInput, '1');
+    user?.clear(vanillaInput);
+    await user?.type(vanillaInput, '1');
 
     expect(total).toHaveTextContent('3.50');
 
-    userEvent?.click(cherriesCheckbox);
+    await user?.click(cherriesCheckbox);
     expect(total).toHaveTextContent('2.00');
   });
 });

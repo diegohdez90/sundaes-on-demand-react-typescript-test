@@ -18,25 +18,25 @@ describe('App', () => {
     const vanillaInput = await screen.findByRole('spinbutton', {
       name: 'Vanilla',
     });
-    user.clear(vanillaInput);
-    user.type(vanillaInput, '1');
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, '1');
 
     const chocolateInput = screen.getByRole('spinbutton', {
       name: 'Chocolate',
     });
-    user.clear(chocolateInput);
-    user.type(chocolateInput, '2');
+    await user.clear(chocolateInput);
+    await user.type(chocolateInput, '2');
 
     const cherriesCheckbox = await screen.findByRole('checkbox', {
       name: 'Cherries',
     });
-    user.click(cherriesCheckbox);
+    await user.click(cherriesCheckbox);
 
     // find and click order summary button
     const orderSummaryButton = screen.getByRole('button', {
       name: /order sundae/i,
     });
-    user.click(orderSummaryButton);
+    await user.click(orderSummaryButton);
 
     // check summary subtotals
     const summaryHeading = screen.getByRole('heading', {
@@ -68,12 +68,12 @@ describe('App', () => {
     const tcCheckbox = screen.getByRole('checkbox', {
       name: /terms and conditions/i,
     });
-    user.click(tcCheckbox);
+    await user.click(tcCheckbox);
 
     const confirmOrderButton = screen.getByRole('button', {
       name: /confirm order/i,
     });
-    user.click(confirmOrderButton);
+    await user.click(confirmOrderButton);
 
     // Expect "loading" to show
     const loading = screen.getByText(/loading/i);
@@ -96,7 +96,7 @@ describe('App', () => {
 
     // find and click "new order" button on confirmation page
     const newOrderButton = screen.getByRole('button', { name: /new order/i });
-    user.click(newOrderButton);
+    await user.click(newOrderButton);
 
     // check that scoops and toppings have been reset
     const scoopsTotal = screen.getByText('Scoops total: $0.00');

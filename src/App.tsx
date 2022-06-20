@@ -23,11 +23,9 @@ function App() {
     default:
   }
   return (
-    <>
-      <OrderDetailsProvider>
-        <Container>{<Component setOrderPhase={setOrderPhase} />}</Container>
-      </OrderDetailsProvider>
-    </>
+    <OrderDetailsProvider>
+      <Container>{<Component setOrderPhase={setOrderPhase} />}</Container>
+    </OrderDetailsProvider>
   );
 }
 

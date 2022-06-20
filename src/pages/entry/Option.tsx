@@ -16,10 +16,13 @@ const Option = ({
   updateItemCount,
 }: Props): React.ReactElement<Props> => {
   const [isValid, setIsValid] = useState(true);
+  const [value, setValue] = useState<string>('0');
 
   const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (inputType === 'checkbox') {
-      updateItemCount(name, e.target.checked ? '1' : '0');
+      const currentValue = e.target.checked ? '1' : '0';
+      setValue(currentValue);
+      updateItemCount(name, currentValue);
     } else {
       const currentValue = e.target.value;
 
@@ -32,6 +35,7 @@ const Option = ({
 
       // validate
       setIsValid(valueIsValid);
+      setValue(currentValue);
 
       // only update context if the value is valid
       if (valueIsValid) updateItemCount(name, currentValue);
@@ -53,15 +57,15 @@ const Option = ({
           {inputType === 'checkbox' ? (
             <Form.Check
               type="checkbox"
-              defaultValue={0}
               onChange={onChangeValue}
+              value={value}
             />
           ) : (
             <Form.Control
               type="number"
-              defaultValue={0}
               onChange={onChangeValue}
               isInvalid={!isValid}
+              value={value}
             />
           )}
         </Col>

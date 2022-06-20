@@ -37,11 +37,7 @@ describe('Order entry', () => {
 });
 
 test('disable order button if there are no scoops ordered', async () => {
-  let userEvent: UserEvent | undefined;
-  await act(() => {
-    const { user } = setup(<OrderEntry setOrderPhase={jest.fn()} />);
-    userEvent = user;
-  });
+  const { user } = setup(<OrderEntry setOrderPhase={jest.fn()} />);
 
   // order button should be disabled at first, even before options load
   const orderButton = screen.getByRole('button', { name: /order sundae/i });
@@ -51,12 +47,12 @@ test('disable order button if there are no scoops ordered', async () => {
   const vanillaInput = await screen.findByRole('spinbutton', {
     name: 'Vanilla',
   });
-  userEvent?.clear(vanillaInput);
-  userEvent?.type(vanillaInput, '1');
+  user?.clear(vanillaInput);
+  await user?.type(vanillaInput, '1');
   expect(orderButton).toBeEnabled();
 
   // expect button to be disabled again after removing scoop
-  userEvent?.clear(vanillaInput);
-  userEvent?.type(vanillaInput, '0');
+  user?.clear(vanillaInput);
+  await user?.type(vanillaInput, '0');
   expect(orderButton).toBeDisabled();
 });
