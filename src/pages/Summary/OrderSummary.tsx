@@ -1,5 +1,6 @@
 import React from 'react';
 import { useOrderDetails } from '../../context/OrderDetails';
+import { OrderDetailsInterface } from '../../utils/constants';
 import SummaryForm from './SummaryForm';
 
 export default function OrderSummary({

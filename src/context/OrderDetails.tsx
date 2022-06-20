@@ -12,7 +12,7 @@ import { formatCurrency } from '../utilities/formatCurrency';
 const OrderDetails = createContext<OrderDetailsInterface | null>(null);
 
 export const useOrderDetails = () => {
-  const context = useContext(OrderDetails);
+  const context = useContext<OrderDetailsInterface | null>(OrderDetails);
 
   if (!context) {
     throw new Error('useOrderDetails must be used within OrderDetailsProvider');

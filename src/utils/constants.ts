@@ -3,6 +3,8 @@ import React, { ProviderProps } from 'react';
 export type OrderDetailsInterface = {
   orderDetails: {
     totals: Map<string, string>;
+    scoops: Map<string, string>;
+    toppings: Map<string, string>;
   };
   optionCounts: Totals;
   updateItemCount: (
@@ -13,6 +15,7 @@ export type OrderDetailsInterface = {
   children: React.ReactNode;
   value: ProviderProps<OrderDetailsInterface | null>;
   [Symbol.toStringTag]: string;
+  [Symbol.iterator](): string;
 };
 
 export type STORE_PRICES = {
