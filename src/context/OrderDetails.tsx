@@ -5,9 +5,8 @@ import React, {
   useEffect,
   useMemo,
   useState,
-  ProviderProps,
 } from 'react';
-import { OrderDetailsInterface, prices } from '../utils/constants';
+import { OrderDetailsInterface, prices, Totals } from '../utils/constants';
 import { formatCurrency } from '../utilities/formatCurrency';
 
 const OrderDetails = createContext<OrderDetailsInterface | null>(null);
@@ -24,13 +23,13 @@ export const useOrderDetails = () => {
 
 const calculateSubTotal = (
   optionItemType: string,
-  optionCounts: Map<string, number>
+  optionCounts: Totals
 ): number => {
   let optionCount = 0;
-  for (const count of optionCounts[optionItemType].values()) {
+  for (const count of optionCounts[optionItemType as keyof Totals].values()) {
     optionCount += count;
   }
-  return optionCount * prices[optionItemType];
+  return optionCount * prices[optionItemType as keyof Totals];
 };
 
 export const OrderDetailsProvider = (
@@ -38,7 +37,7 @@ export const OrderDetailsProvider = (
     children: React.ReactNode;
   }>
 ): JSX.Element => {
-  const [optionCounts, setOptionCounts] = useState({
+  const [optionCounts, setOptionCounts] = useState<Totals>({
     scoops: new Map<string, number>([
       ['Mint chip', 0],
       ['Vanilla', 0],
@@ -83,7 +82,7 @@ export const OrderDetailsProvider = (
       optionType: string
     ) {
       const newOptionCounts = { ...optionCounts };
-      const optionCountMap = optionCounts[optionType];
+      const optionCountMap = optionCounts[optionType as keyof Totals];
       optionCountMap?.set(itemName, parseInt(newItemCount));
       setOptionCounts(newOptionCounts);
     }

@@ -9,9 +9,9 @@ export default function OrderSummary({
 }) {
   const [{ scoops, toppings, totals }] = useOrderDetails();
 
-  const scoopArray = Array.from(scoops.entries());
-  const scoopList = scoopArray.map(([key, value]) => (
-    <li key={key}>
+  const scoopArray: Map<string, string>[] = Array.from(scoops.entries());
+  const scoopList: JSX.Element[] = scoopArray.map(([key, value]) => (
+    <li key={key.toString()}>
       {value} {key}
     </li>
   ));
@@ -20,8 +20,10 @@ export default function OrderSummary({
   let toppingsDisplay = null;
 
   if (hasToppings) {
-    const toppingsArray = Array.from(toppings.keys());
-    const toppingList = toppingsArray.map((key) => <li key={key}>{key}</li>);
+    const toppingsArray: Map<string, string>[] = Array.from(toppings.keys());
+    const toppingList = toppingsArray.map((key) => (
+      <li key={key.toString()}>{key}</li>
+    ));
     toppingsDisplay = (
       <>
         <h2>Toppings: {totals.get('toppings')}</h2>

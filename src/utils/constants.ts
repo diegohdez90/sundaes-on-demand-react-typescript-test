@@ -4,7 +4,7 @@ export type OrderDetailsInterface = {
   orderDetails: {
     totals: Map<string, string>;
   };
-  optionCounts: Map<string, Map<string, number>>;
+  optionCounts: Totals;
   updateItemCount: (
     itemName: string,
     newItemCount: string,
@@ -20,6 +20,11 @@ export type STORE_PRICES = {
   toppings: number;
   [key: string]: number;
 };
+
+export interface Totals {
+  scoops: Map<string, number>;
+  toppings: Map<string, number>;
+}
 
 export type MapOrderDetails<T> = {
   [key: string]: T;
