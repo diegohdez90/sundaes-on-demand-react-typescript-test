@@ -3,7 +3,6 @@ import { render, screen } from './../../../test-utils/testing-library-utils';
 import Options from '../Options';
 import userEvent from '@testing-library/user-event';
 import OrderEntry from '../OrderEntry';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup';
 
 const setup = (component: React.ReactElement) => ({
   user: userEvent.setup(),
