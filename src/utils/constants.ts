@@ -1,22 +1,16 @@
-import React, { ProviderProps } from 'react';
-
-export type OrderDetailsInterface = {
-  orderDetails: {
+export type OrderDetailsInterface = [
+  data: {
     totals: Map<string, string>;
-    scoops: Map<string, string>;
-    toppings: Map<string, string>;
-  };
-  optionCounts: Totals;
+    scoops: Map<string, number>;
+    toppings: Map<string, number>;
+  },
   updateItemCount: (
     itemName: string,
     newItemCount: string,
     optionType: string
-  ) => void;
-  children: React.ReactNode;
-  value: ProviderProps<OrderDetailsInterface | null>;
-  [Symbol.toStringTag]: string;
-  [Symbol.iterator](): string;
-};
+  ) => void,
+  resetOrder: () => void
+];
 
 export type STORE_PRICES = {
   scoops: number;

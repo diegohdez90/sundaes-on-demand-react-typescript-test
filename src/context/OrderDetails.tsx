@@ -75,7 +75,7 @@ export const OrderDetailsProvider = (
     setTotals(innerTotal);
   }, [optionCounts]);
 
-  const value = useMemo(() => {
+  const value: OrderDetailsInterface = useMemo(() => {
     function updateItemCount(
       itemName: string,
       newItemCount: string,
